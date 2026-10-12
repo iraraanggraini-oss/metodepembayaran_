@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pink Payment ♡</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    padding: 25px 15px;
+    background: linear-gradient(135deg, #fffaff, #ffe4f0, #ffffff);
+    color: #795168;
+}
+
+.container {
+    max-width: 600px;
+    margin: 25px auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.header .icon {
+    font-size: 48px;
+}
+
+.header h1 {
+    color: #d875a1;
+    margin: 10px 0;
+}
+
+.header p {
+    color: #b18da1;
+    font-size: 14px;
+}
+
+.card {
+    padding: 25px;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 10px 35px #edcddd80;
+    border: 1px solid #f9dfeb;
+}
+
+h2 {
+    font-size: 19px;
+    color: #c96d98;
+    margin-bottom: 18px;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0 18px;
+    border: 1px solid #f0d3e1;
+    border-radius: 12px;
+    outline: none;
+    background: #fffafd;
+    color: #795168;
+}
+
+input:focus {
+    border-color: #df8eb3;
+}
+
+.methods {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 15px 0 22px;
+}
+
+.method {
+    padding: 15px 5px;
+    text-align: center;
+    border: 2px solid #f5e2ec;
+    border-radius: 16px;
+    background: #fffafd;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.method:hover {
+    transform: translateY(-3px);
+}
+
+.method.active {
+    background: linear-gradient(135deg, #ffdeed, white);
+    border-color: #e58eb5;
+    box-shadow: 0 5px 15px #f6dce9;
+}
+
+.emoji {
+    font-size: 27px;
+    margin-bottom: 8px;
+}
+
+.method span {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.detail {
+    display: none;
+}
+
+.detail.show {
+    display: block;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    color: white;
+    background: linear-gradient(100deg, #df82ab, #f2b8d2);
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 15px #f0d0df;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(100deg, #d66c9c, #eaa5c4);
+}
+
+.result {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, #fff0f7, white);
+    border: 1px solid #f4d5e4;
+    border-radius: 18px;
+}
+
+.result h2 {
+    margin-bottom: 15px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px dashed #e9ccdc;
+    font-size: 13px;
+}
+
+.row span:last-child {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.total {
+    color: #c6538a;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+}
+
+.note {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #b18da1;
+}
+
+@media(max-width: 400px) {
+    .card {
+        padding: 18px;
+    }
+
+    .methods {
+        gap: 5px;
+    }
+
+    .method span {
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="icon">🎀</div>
+        <h1>Pink Payment</h1>
+        <p>Pembayaran mudah dan praktis ♡</p>
+    </div>
+
+    <div class="card">
+
+        <h2>♡ Detail Pembayaran</h2>
+
+        <form id="formBayar">
+
+            <label>Jumlah Pembayaran (Rp)</label>
+            <input type="number" id="jumlah"
+                   min="1" placeholder="Contoh: 500000" required>
+
+            <label>Keterangan</label>
+            <input type="text" id="keterangan"
+                   placeholder="Pembelian barang" required>
+
+            <h2>♡ Pilih Metode Pembayaran</h2>
+
+            <div class="methods">
+
+                <div class="method active"
+                     onclick="pilihMetode('transfer', this)">
+                    <div class="emoji">🏦</div>
+                    <span>Transfer Bank</span>
+                </div>
+
+                <div class="method"
+                     onclick="pilihMetode('qris', this)">
+                    <div class="emoji">📱</div>
+                    <span>QRIS</span>
+                </div>
+
+                <div class="method"
+                     onclick="pilihMetode('kartu', this)">
+                    <div class="emoji">💳</div>
+                    <span>Kartu Kredit</span>
+                </div>
+
+            </div>
+
+            <input type="hidden" id="metode" value="transfer">
+
+            <div class="detail show" id="detail-transfer">
+                <label>Nomor Rekening</label>
+                <input type="text" id="rekening"
+                       placeholder="Masukkan nomor rekening">
+            </div>
+
+            <div class="detail" id="detail-qris">
+                <p style="font-size:13px;margin-bottom:18px">
+                    ✨ Biaya admin QRIS sebesar 0,7%
+                </p>
+            </div>
+
+            <div class="detail" id="detail-kartu">
+                <label>Nomor Kartu Kredit</label>
+                <input type="text" id="kartu"
+                       inputmode="numeric" maxlength="19"
+                       placeholder="Masukkan nomor kartu">
+                <p style="font-size:12px;margin-bottom:15px">
+                    🔒 Hasil hanya menampilkan 4 digit terakhir.
+                </p>
+            </div>
+
+            <button type="submit">♡ Proses Pembayaran ♡</button>
+
+        </form>
+
+        <div class="result" id="hasil">
+            <h2>♡ Rincian Pembayaran</h2>
+            <div id="rincian"></div>
+        </div>
+
+    </div>
+
+    <div class="note">
+        Made with love ♡ Pink Payment Website
+    </div>
+
+</div>
+
+<script>
+let metodeTerpilih = "transfer";
+
+function pilihMetode(metode, elemen) {
+    metodeTerpilih = metode;
+    document.getElementById("metode").value = metode;
+
+    document.querySelectorAll(".method").forEach(function(item) {
+        item.classList.remove("active");
+    });
+
+    elemen.classList.add("active");
+
+    document.querySelectorAll(".detail").forEach(function(item) {
+        item.classList.remove("show");
+    });
+
+    document.getElementById("detail-" + metode)
+        .classList.add("show");
+}
+
+function rupiah(angka) {
+    return "Rp " + Math.round(angka).toLocaleString("id-ID");
+}
+
+document.getElementById("formBayar").addEventListener("submit",
+function(event) {
+    event.preventDefault();
+
+    const jumlah = Number(document.getElementById("jumlah").value);
+    const keterangan = document.getElementById("keterangan").value.trim();
+
+    if (!Number.isFinite(jumlah) || jumlah <= 0 || !keterangan) {
+        alert("Isi jumlah dan keterangan dengan benar!");
+        return;
+    }
+
+    let namaMetode = "";
+    let admin = 0;
+    let tambahan = "";
+
+    if (metodeTerpilih === "transfer") {
+        namaMetode = "Transfer Bank";
+        tambahan = document.getElementById("rekening").value.trim();
+
+        if (!tambahan) {
+            alert("Masukkan nomor rekening!");
+            return;
+        }
+    } else if (metodeTerpilih === "qris") {
+        namaMetode = "QRIS";
+        admin = jumlah * 0.007;
+    } else if (metodeTerpilih === "kartu") {
+        namaMetode = "Kartu Kredit";
+
+        const nomorKartu = document.getElementById("kartu")
+            .value.replace(/\s/g, "");
+
+        if (!/^\d{13,19}$/.test(nomorKartu)) {
+            alert("Masukkan nomor kartu 13-19 digit!");
+            return;
+        }
+
+        tambahan = "**** **** **** " + nomorKartu.slice(-4);
+        admin = jumlah * 0.025;
+    }
+
+    let total = jumlah + admin;
+
+    let html = `
+        <div class="row">
+            <span>Metode</span>
+            <span>${namaMetode}</span>
+        </div>`;
+
+    if (metodeTerpilih === "transfer") {
+        html += `
+        <div class="row">
+            <span>Nomor Rekening</span>
+            <span>${tambahan.replace(/[&<>"']/g, function(c) {
+                return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+            })}</span>
+        </div>`;
+    }
+
+    if (metodeTerpilih === "kartu") {
+        html += `
+        <div class="row">
+            <span>Nomor Kartu</span>
+            <span>${tambahan}</span>
+        </div>`;
+    }
+
+    html += `
+        <div class="row">
+            <span>Keterangan</span>
+            <span>${keterangan.replace(/[&<>"']/g, function(c) {
+                return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+            })}</span>
+        </div>
+        <div class="row">
+            <span>Jumlah</span>
+            <span>${rupiah(jumlah)}</span>
+        </div>
+        <div class="row">
+            <span>Biaya Admin</span>
+            <span>${rupiah(admin)}</span>
+        </div>
+        <div class="row total">
+            <span>Total Pembayaran</span>
+            <span>${rupiah(total)}</span>
+        </div>
+        <p style="text-align:center;color:#c6538a;font-size:12px;margin-top:15px">
+            ♡ Simulasi pembayaran berhasil ♡
+        </p>`;
+
+    document.getElementById("rincian").innerHTML = html;
+    document.getElementById("hasil").style.display = "block";
+
+    document.getElementById("hasil").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+</script>
+
+</body>
+</html>
